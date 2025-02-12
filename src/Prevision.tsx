@@ -1,5 +1,9 @@
 import React from 'react';
 
+// const yesterdayPrevision:Number[] = [];
+// const todayPrevision:Number[] = [];
+
+
 export default function Prevision() {
     function yesterday(direction:boolean) {
         let res:Number[] = [];
