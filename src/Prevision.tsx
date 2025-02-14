@@ -1,14 +1,19 @@
 import React from 'react';
+import StatusCard from './StatusCard.tsx';
+
+// const yesterdayPrevision:Number[] = [];
+// const todayPrevision:Number[] = [];
+
 
 export default function Prevision() {
     function yesterday(direction:boolean) {
         let res:Number[] = [];
         if(direction) {
-            for (let i = 0; i < 23; i++) {
+            for (let i = 0; i < 24; i++) {
                 res[i] = i;
             }
         } else {
-            for (let i = 0; i < 23; i++) {
+            for (let i = 0; i < 24; i++) {
                 res[i] = 23 - i;
             }
         }
@@ -18,17 +23,19 @@ export default function Prevision() {
     const todayPrevision:Number[] = yesterday(true);
     return(
         <>
-            <div className='flex flex-row w-3/4 p-2 border-2 border-white rounded-md text-wrap justify-between'>
+            <h2>Previous</h2>
+            <div className='grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-12 p-2 justify-between gap-1'>
                 {
-                    yesterdayPrevision.map(hour => {
-                        return <p className="text-xl">{hour}</p>
+                    yesterdayPrevision.map((hour,index) => {
+                        return <StatusCard key={index} hour={hour}/>
                     })
                 }
             </div>
-            <div className='flex flex-row w-3/4 p-2 border-2 border-white rounded-md text-wrap justify-between'>
+            <h2>Next</h2>
+            <div className='grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-12 p-2 justify-between gap-1'>
                 {
-                    todayPrevision.map(hour => {
-                        return <p>{hour}</p>
+                    todayPrevision.map((hour, index) => {
+                        return <StatusCard key={index} hour={hour}/>
                     })
                 }
             </div>

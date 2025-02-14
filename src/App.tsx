@@ -5,8 +5,8 @@ import Prevision from './Prevision.tsx';
 
 function App() {
   return (
-    <div className="h-screen w-full bg-black flex flex-col gap-2 justify-center items-center text-white">
-      <header className="font-bold text-3xl">
+    <div className="min-h-screen max-h-full w-full bg-black flex flex-col gap-5 justify-center items-center text-white">
+      <header className="font-bold text-3xl mt-5">
         Cabeçalho do App de Previsão do tempo
       </header>
       <SearchBar />
