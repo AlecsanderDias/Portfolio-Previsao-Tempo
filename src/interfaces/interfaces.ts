@@ -1,9 +1,10 @@
 interface WeatherStatus {
-    location: String,
-    status: String,
-    temperature: Number,
-    rainChance: Number,
-    windSpeed: Number
+    city: String,
+    country: String,
+    status?: String,
+    temperature?: Number,
+    rainChance?: Number,
+    windSpeed?: Number
 }
 
 interface WeatherPrevisionCard {
@@ -22,5 +23,6 @@ interface WeatherData {
 
 export {
     WeatherData,
-    WeatherStatus
+    WeatherStatus,
+    WeatherPrevisionCard
 };
