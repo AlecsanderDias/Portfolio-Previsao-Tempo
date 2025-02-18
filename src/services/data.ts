@@ -1,3 +1,18 @@
+import { WeatherStatus } from "../interfaces/interfaces";
+
+const getLocation = async () => {
+    let location;
+    try {
+    location = await fetch("http://ip-api.com/json/?fields=status,message,countryCode,city,query")
+        .then(response => response.json())
+        .then(data => data);
+
+    } catch (error) {
+        console.log(error?.message);
+    }
+    return location === undefined ? undefined : filterLocation(location);
+}
+
 const getData = async (city: String) => {
     // data needed => city / current location, current hour, previous 24h, later 24h
     const yesterday = getYesterday();
@@ -32,8 +47,16 @@ function getYesterday() {
     return yesterday;
 }
 
+function filterLocation(data) {
+    let location: WeatherStatus = {
+        city: data.city,
+        country: data.countryCode, 
+    };
+    return location;
+}
+
 function filterData(data) {
 
 }
 
-export {getData, getTomorrow, getYesterday};
+export {getLocation, getData, getTomorrow, getYesterday};
