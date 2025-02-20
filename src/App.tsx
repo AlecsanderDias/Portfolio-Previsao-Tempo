@@ -3,32 +3,46 @@ import SearchBar from './SearchBar.tsx';
 import CurrentStatus from './CurrentStatus.tsx';
 import Prevision from './Prevision.tsx';
 import { WeatherStatus } from './interfaces/interfaces.ts';
-import { getLocation } from './services/data.ts';
+import { getLocation, getData } from './services/data.ts';
 
 function App() {
   let [weather, setWeather] = useState<WeatherStatus | undefined>(undefined);
-  let [location] = "Brasilia";
-  useEffect(() => {
-    // const data = async () => {
-    //   const response = await getData(location);
-    // };
-    // data();
+  let [refreshCounter, setRefreshCounter] = useState<number>(3);
+  let [errorMessage, setErrorMessage] = useState<string>("");
+  const updateWeather = async () => {
+    if(refreshCounter > 0) {
+      console.log(weather?.city, refreshCounter);
+      setRefreshCounter((refreshCounter:number) => refreshCounter - 1);
+    }
+  };
 
+  const getCityWeather = async (city:string) => {
+    console.log("City => ", city);
+  };
+  
+  useEffect(() => {
+    const data = async (city) => {
+      const response = await getData(city);
+      console.log(response);
+    };
     const location = async () => {
       const result = await getLocation();
       console.log(result);
-      setWeather({...result});
+      const final = await data(result?.city);
+      setWeather(final);
     }
     location();
   }, []);
-  
+
   return (
     <div className="min-h-screen max-h-full w-full bg-black flex flex-col gap-5 justify-center items-center text-white">
       <header className="font-bold text-3xl mt-5">
         Previsão do tempo
       </header>
-      <SearchBar />
-      <CurrentStatus city={weather?.city} country={weather?.country} status={'sunny'} temperature={22} rainChance={23} windSpeed={20}/>
+      <SearchBar getCityWeather={getCityWeather}/>
+      <p className="bg-red-200 text-red-600 border-2 border-red-600 rounded-md p-2">{"Teste"}</p>
+      <button className="border-white border-2 rounded-md p-2 hover:bg-slate-800" onClick={() => updateWeather()}>Refresh Weather</button>
+      <CurrentStatus city={weather?.city} status={'sunny'} temperature={22} rainChance={23} windSpeed={20}/>
       <Prevision />
     </div>
   );

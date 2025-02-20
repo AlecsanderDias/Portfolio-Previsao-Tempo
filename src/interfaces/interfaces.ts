@@ -1,6 +1,5 @@
 interface WeatherStatus {
     city: String,
-    country: String,
     status?: String,
     temperature?: Number,
     rainChance?: Number,
