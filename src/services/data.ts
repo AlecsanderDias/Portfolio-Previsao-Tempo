@@ -1,4 +1,5 @@
 import { WeatherData, WeatherPrevisionCard, WeatherStatus } from "../interfaces/interfaces";
+import { data } from "./example.ts";
 
 const getLocation = async () => {
     let location, result;
@@ -14,26 +15,27 @@ const getLocation = async () => {
 
 const getData = async (city: String) => {
     // data needed => city / current location, current hour, previous 24h, later 24h
-    const yesterday = getYesterday();
-    const tomorrow = getTomorrow();
-    const headers = new Headers();
-    headers.set("Content-Type", "application/json");
-    headers.set("Accept", "application/json");
-    const requestOptions = {
-        method: "GET",
-        headers: headers
-    }
-    try {
-        const response = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}/${yesterday}/${tomorrow}?key=${process.env.REACT_APP_API_KEY}`, requestOptions );
-        if(!response.ok) {
-            console.log("Fail to Get API data!");
-        };
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.log(error?.message);
-    }
-    return undefined;
+    // const yesterday = getYesterday();
+    // const tomorrow = getTomorrow();
+    // const headers = new Headers();
+    // headers.set("Content-Type", "application/json");
+    // headers.set("Accept", "application/json");
+    // const requestOptions = {
+    //     method: "GET",
+    //     headers: headers
+    // }
+    // try {
+    //     const response = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}/${yesterday}/${tomorrow}?key=${process.env.REACT_APP_API_KEY}`, requestOptions );
+    //     if(!response.ok) {
+    //         console.log("Fail to Get API data!");
+    //     };
+    //     const result = await response.json();
+    //     return filterData(result);
+    // } catch (error) {
+    //     console.log(error?.message);
+    // }
+    // return undefined;
+    return filterData(data);
 };
 
 function getTomorrow() {
@@ -68,21 +70,29 @@ function filterData(data:any) {
     let next:WeatherPrevisionCard[] = [];
     let prev:WeatherPrevisionCard[] = [];
     let currHour = parseInt(`${data?.currentConditions?.datetime[0]}${data?.currentConditions?.datetime[1]}`);
-    let n = 2, p = 0;
+    let n = 1, p = 0;
     for (let i = 0; i < 24; i++) {
         // Arrumar os arrays dos dados com os horários corretos
+        
+        if(currHour === 24) {
+            currHour = 0;
+            ++n;
+            ++p;
+        }
+        console.log(currHour, n, p, data.days[n].hours[currHour]);
         next[i] = {
             hour: data.days[n].hours[currHour].datetime,
             status: data.days[n].hours[currHour].conditions,
             windSpeed: data.days[n].hours[currHour].windspeed,
             temperature: data.days[n].hours[currHour].temp
         }
-        prev[i] = {
+        prev[23-i] = {
             hour: data.days[p].hours[currHour].datetime,
             status: data.days[p].hours[currHour].conditions,
             windSpeed: data.days[p].hours[currHour].windspeed,
             temperature: data.days[p].hours[currHour].temp
         }
+        ++currHour;
     };
     let result:WeatherData = {
         current: weather,

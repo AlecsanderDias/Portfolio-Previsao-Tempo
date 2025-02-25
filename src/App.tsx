@@ -24,6 +24,7 @@ function App() {
     const data = async (city) => {
       const response = await getData(city);
       console.log(response);
+      return response;
     };
     const location = async () => {
       const result = await getLocation();
@@ -42,7 +43,7 @@ function App() {
       <SearchBar getCityWeather={getCityWeather}/>
       <p className="bg-red-200 text-red-600 border-2 border-red-600 rounded-md p-2">{"Teste"}</p>
       <button className="border-white border-2 rounded-md p-2 hover:bg-slate-800" onClick={() => updateWeather()}>Refresh Weather</button>
-      <CurrentStatus city={weather?.city} status={'sunny'} temperature={22} rainChance={23} windSpeed={20}/>
+      <CurrentStatus city={weather?.current?.city} status={weather?.current?.status} temperature={weather?.current?.temperature} rainChance={weather?.current?.rainChance} windSpeed={weather?.current?.windSpeed}/>
       <Prevision />
     </div>
   );
